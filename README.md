@@ -50,14 +50,18 @@ warning是因为webpack4.0之后引入了模式，分为生产模式，开发模
 4. 下面的👇的几个babel全家桶的作用还没有完全搞懂
 5. `npm i html-webpack-plugin --save-dev`处理html插件
 
+`npm i babel-loader@7 --save-dev`安装加载器，连接到webpack，这里的版本要注意⚠️，不然会报错
+
+`npm install --save-dev babel-preset-react`将react的jsx语法转化成javascript
+`npm install eslint-plugin-react-hooks --save-dev`安装hooks规则插件
 
 ```
 npm install --save babel-polyfill
-npm i babel-loader@7 --save-dev
+
 npm install --save babel-runtime
 npm install --save-dev babel-plugin-transform-runtime
 npm install --save-dev babel-preset-es2015
-npm install --save-dev babel-preset-react
+
 npm install --save-dev babel-preset-stage-2
 ```
 
@@ -96,6 +100,9 @@ module.exports = {
             use: ['babel-loader'], // 使用babel-loader进行加载
         }]
     },
+    resolve: {
+        extensions: ['*', '.js', '.jsx', '.css', '.less'], // 识别这几个文件
+    }, // 这个配置保证可以识别react的jsx文件
     plugins: [
         new HtmlWebpackPlugin({
             template: './public/index.html', // 处理html模板文件，并放到build文件夹中去
@@ -111,5 +118,60 @@ git add *
 git commit -m "msg"
 git remote add origin https://github.com/AlisaBen/start-react-hooks.git
 git push -u origin master
+
+```
+`git checkout -b dev`切换到dev分支
+`git push -u origin dev`推送到远程
+
+
+# 进入hook主题
+
+## 初识hook
+
+hook是一些可以让我们在函数组件中钩入state和生命周期等特性的函数，只能在function组件中使用
+
+## useState
+官网的小例子挺简单的，这里不做过多解释，简而言之，`useState(initValue)`函数的参数是state的初始值，返回的是一个列表，我们可以通过解构赋值，设置状态变量和设置状态变量的函数
+
+[官网教程链接🔗](https://react.docschina.org/docs/hooks-overview.html)
+```javascript
+function App() {
+    const [ count, setCount ] = useState(0);
+    return (
+        <div>
+            <p>you clicked {count} times</p>
+            <button onClick={() => setCount(count + 1)}>click me</button>
+        </div>
+    )
+}
+```
+
+## useEffect
+
+### 目的
+在完成对dom的更改后运行副作用函数
+默认情况下会在每次渲染后调用副作用函数
+
+### 事件监听解除
+
+
+```javascript
+import React, { useState, useEffect } from 'react';
+
+export default () => {
+    const [ count, setCount ] = useState(0);
+
+    // 相当于componentDidMount和componentDidUpdate函数
+    useEffect(() => {
+        document.title = `you click ${count} times`
+    })
+
+    return (
+        <div>
+            <p>you clicked {count} times</p>
+            <button onClick={() => setCount(count + 1)}>click me</button>
+        </div>
+    )
+}
 ```
 
