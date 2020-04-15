@@ -75,22 +75,41 @@ npm install --save-dev babel-preset-stage-2
 暂时简单化，仅配置入口文件，输出文件和js文件的babel转换
 
 ```javascript
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
+
 module.exports = {
-    entry: './src/index.js',
+    mode: 'production',
+    entry: {
+        'index':['./src/index.js'],
+    },
     output: {
-        pathname: __dirname + '/build',
-        filename: 'bundle.js',
+        path: path.resolve(__dirname, './build'),
+        filename: 'js/[name]-[hash:8].js', // main-8位哈希值，指定生成的文件
     },
     module: {
         rules: [{
             test: /\.js$/,
-            exclude: /node_modules/,
-            loader: 'babel-loader',
-            query: {
-                plugins: ['transform-runtime'],
-                presets: ['es2015', 'react', 'stage-2']
-            }
+            exclude: /node_modules/, // 除去node_modules文件的检测
+            include: path.resolve(__dirname, './src'), // 仅处理src下的js文件
+            use: ['babel-loader'], // 使用babel-loader进行加载
         }]
-    }
+    },
+    plugins: [
+        new HtmlWebpackPlugin({
+            template: './public/index.html', // 处理html模板文件，并放到build文件夹中去
+        })
+    ]
 }
 ```
+
+# git管理项目
+```
+git init
+git add *
+git commit -m "msg"
+git remote add origin https://github.com/AlisaBen/start-react-hooks.git
+git push -u origin master
+```
+
