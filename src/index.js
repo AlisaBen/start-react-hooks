@@ -1,13 +1,8 @@
 import ReactDOM from 'react-dom';
-import React from 'react';
+import React, { useState } from 'react';
+// import App from './Example01usestate';
+// import App from './Example02effect';
+// import App from './Example03useContext2';
+import App from './Example04useReducer';
 
-function App() {
-    return (
-        <div>
-            {
-                ['a','b'].map(item => (<p>{item}</p>))
-            }
-        </div>
-    )
-}
 ReactDOM.render(<App />,document.getElementById('root'));
